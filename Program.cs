@@ -37,7 +37,7 @@ namespace dotetML4._8
 
             //Step 2. Read in the input data from a text file for model training
             IDataView trainingData = ctx.Data
-                .LoadFromTextFile<ModelInput>(@"D:\sent.txt", hasHeader: true);
+                .LoadFromTextFile<ModelInput>(args[0], hasHeader: false);
 
             //Step 3. Build your data processing and training pipeline
             var pipeline = ctx.Transforms.Text
@@ -52,10 +52,11 @@ namespace dotetML4._8
             var predictionEngine = ctx.Model
                 .CreatePredictionEngine<ModelInput, ModelOutput>(trainedModel);
 
-            var sampleStatement = new ModelInput() { SentimentText = "This is a horrible movie" };
+            var sampleStatement = new ModelInput() { SentimentText = args[1] };
 
             var prediction = predictionEngine.Predict(sampleStatement);
-            Console.WriteLine(prediction.Prediction);
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(prediction));
+           // Console.ReadKey();
         }
     }
 }
